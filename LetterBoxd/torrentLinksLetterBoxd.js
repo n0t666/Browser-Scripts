@@ -1,17 +1,16 @@
 // ==UserScript==
-// @name        Letterboxd
-// @namespace
-// @description
-// @copyright
+// @name        Letterboxd Magnet Links
+// @namespace   n0tScripts
+// @description Add magnet links to Letterboxd, for 1337x, YTS, Rutracker, and WatchSoMuch
+// @author       Leandro Pereira
 // @icon
-// @license
-// @version
+// @license MIT
+// @version    1.0
 // @match        *://*.letterboxd.com/*
 // @grant       none
 // ==/UserScript==
 
 (function () {
-
   const endPoints = {
     "1337x": "https://1337x.st/search/",
     "yts": "https://yts.mx/browse-movies/",
@@ -26,40 +25,32 @@
     "watchsomuch": "https://watchsomuch.to/Images/Logo.png"
   };
 
-
   var titleContainer = document.querySelector(".headline-1");
   var yearContainer = document.querySelector(".releaseyear");
 
-  console.log("loaded");
   if (titleContainer && yearContainer) {
-    console.log("died");
     var title = titleContainer.textContent.trim();
     var year = yearContainer.textContent.trim();
     var searchQuery = `${title} ${year}`;
 
-
     var metaBlock = document.querySelector(".metablock");
-    console.log(metaBlock);
     var p = document.createElement("p");
-    p.style.marginTop = "20px"; 
-
+    p.style.marginTop = "10px";
 
     for (var key in endPoints) {
       var a = document.createElement("a");
       var href;
-      switch(key)
-      {
+      switch (key) {
         case "1337x":
-          href = `${endPoints[key]}${searchQuery.replace(/ /g, "+")}/1/`;
+          href = `${endPoints[key]}${searchQuery}/1/`;
+          console.log(href);
           break;
         case "yts":
-          href = `${endPoints[key]}${searchQuery}/all/all/0/latest/0/all`;
+          href = `${endPoints[key]}${searchQuery}` +  "/all/all/0/seeds/0/all";
+          console.log(href);
           break;
-        case "rutracker":
-          href = `${endPoints[key]}${searchQuery.replace(/ /g, "+")}`;
-          break;
-        case "watchsomuch":
-          href = `${endPoints[key]}${searchQuery}` + "/";
+        default:
+          href = `${endPoints[key]}${searchQuery}`;
           break;
       }
       a.href = href;
@@ -70,10 +61,9 @@
       var img = document.createElement("img");
       img.src = images[key];
       img.alt = key;
-      img.style.height = "15px";
+      img.style.height = "30px";
       img.style.verticalAlign = "middle";
       img.style.marginRight = "5px";
-
 
       a.appendChild(img);
       p.appendChild(a);
